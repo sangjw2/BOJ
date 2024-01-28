@@ -1,39 +1,44 @@
 #include <iostream>
-#include <cstring>
+#include <string>
+#include <unordered_map>
+#include <cctype>
 using namespace std;
 
-struct Dict{
-    char name[21];
-};
 
-int compare(const Dict* a,const Dict* b) {
-    return strcmp(a->name, b->name);
-}
+
+// int compare(const void* a, const void* b) {
+//     return strcmp(((Dict*)a)->name, ((Dict*)b)->name);
+// }
+
+
 
 int main() {
     cin.tie(NULL);
     ios::sync_with_stdio(false);
 
     int n,m;
-    char pokemon[21];
-    Dict* pokeDict;
+    string pokemon;
+    unordered_map<int, string> pokeDict;
+    unordered_map<string, int> pokeDict_str;
 
     cin >> n >> m;
-    pokeDict = new Dict[n];
 
-    for(int i=0;i<n;i++) {
-        cin >> pokeDict[i].name;
+
+    for(int i=1;i<=n;i++) {
+        cin >> pokemon;
+        pokeDict.insert(make_pair(i,pokemon));
+        pokeDict_str.insert(make_pair(pokemon,i));
     }
 
-    qsort(pokeDict, n, sizeof(Dict),compare); // error
-
-    for(int i=0;i<m;i++) {
+    while(m--) {
         cin >> pokemon;
-        if(pokemon[0]>'9') {
-            // 문자로 시작
-            continue;
+
+        if(isdigit(pokemon[0])) {
+            cout << pokeDict[stoi(pokemon)] << '\n';
+        } else {
+            cout << pokeDict_str[pokemon] << '\n';
         }
     }
 
-    delete[] pokeDict;
+    return 0;
 }
